@@ -20,7 +20,7 @@ export class UpdateBikeUseCase {
     if (dto.code) bike.code = dto.code;
     if (dto.status) bike.status = dto.status as BikeStatus;
 
-    bike.updatedAt = new Date();
+    bike.updatedAt = new Date().toISOString();
 
     await this.bikeRepository.update(bike);
   }

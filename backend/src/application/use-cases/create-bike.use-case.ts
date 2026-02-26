@@ -18,8 +18,8 @@ export class CreateBikeUseCase {
       stationId: dto.stationId,
       code: dto.code,
       status: BikeStatus.AVAILABLE,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     await this.bikeRepository.create(bike);

@@ -9,6 +9,6 @@ export interface Bike {
   stationId: string;
   code: string; 
   status: BikeStatus;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
