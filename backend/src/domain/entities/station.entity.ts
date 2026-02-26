@@ -4,5 +4,5 @@ export interface Station {
   location: string;
   city: 'Medellin';
   capacity: number;
-  createdAt: Date;
+  createdAt: string;
 }
