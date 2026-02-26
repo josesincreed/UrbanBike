@@ -1,0 +1,50 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: IAM Roles for UrbanBike ECS Fargate
+
+Resources:
+
+  UrbanBikeTaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: urbanbike-task-execution-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+
+  UrbanBikeTaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: urbanbike-task-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: UrbanBikeDynamoAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:GetItem
+                  - dynamodb:Query
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                Resource: "*"
+
+Outputs:
+  TaskExecutionRoleArn:
+    Value: !GetAtt UrbanBikeTaskExecutionRole.Arn
+
+  TaskRoleArn:
+    Value: !GetAtt UrbanBikeTaskRole.Arn
