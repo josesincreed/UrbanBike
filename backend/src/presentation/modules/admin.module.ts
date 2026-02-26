@@ -13,9 +13,14 @@ import { ListStationsUseCase } from '../../application/use-cases/list-stations.u
 import { CreateUserUseCase } from '../../application/use-cases/create-user.use-case';
 import { GetUserUseCase } from '../../application/use-cases/get-user.use-case';
 
+import { CreateReservationUseCase } from '../../application/use-cases/create-reservation.use-case';
+import { ListUserActiveReservationsUseCase } from '../../application/use-cases/list-user-active-reservations.use-case';
+import { FinishReservationUseCase } from '../../application/use-cases/finish-reservation.use-case';
+
 import { DynamoBikeRepository } from '../../infrastructure/repositories/dynamo-bike.repository';
 import { DynamoStationRepository } from '../../infrastructure/repositories/dynamo-station.repository';
 import { DynamoUserRepository } from '../../infrastructure/repositories/dynamo-user.repository';
+import { DynamoReservationRepository } from '../../infrastructure/repositories/dynamo-reservation.repository';
 
 @Module({
   controllers: [AdminController],
@@ -35,6 +40,11 @@ import { DynamoUserRepository } from '../../infrastructure/repositories/dynamo-u
     CreateUserUseCase,
     GetUserUseCase,
 
+    // Reservation UseCases
+    CreateReservationUseCase,
+    ListUserActiveReservationsUseCase,
+    FinishReservationUseCase,
+
     // Repositories
     {
       provide: 'BikeRepository',
@@ -47,6 +57,10 @@ import { DynamoUserRepository } from '../../infrastructure/repositories/dynamo-u
     {
       provide: 'UserRepository',
       useClass: DynamoUserRepository,
+    },
+    {
+      provide: 'ReservationRepository',
+      useClass: DynamoReservationRepository,
     },
   ],
 })
