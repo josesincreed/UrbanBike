@@ -5,7 +5,7 @@ import {
   DeleteCommand,
 } from '@aws-sdk/lib-dynamodb';
 
-import { Bike } from '../../domain/entities/bike.entity';
+import { Bike, BikeStatus } from '../../domain/entities/bike.entity';
 import { BikeRepository } from '../../domain/repositories/bike.repository.interface';
 import { dynamoClient } from '../database/dynamo.client';
 
@@ -71,7 +71,7 @@ export class DynamoBikeRepository implements BikeRepository {
 
     const bikes = (result.Items as Bike[]) || [];
 
-    return bikes.filter((bike) => bike.status === 'AVAILABLE');
+    return bikes.filter((bike) => bike.status === BikeStatus.AVAILABLE);
   }
 
   async update(bike: Bike): Promise<void> {
