@@ -20,10 +20,15 @@ import { ListStationsUseCase } from '../../application/use-cases/list-stations.u
 import { CreateUserUseCase } from '../../application/use-cases/create-user.use-case';
 import { GetUserUseCase } from '../../application/use-cases/get-user.use-case';
 
+import { CreateReservationUseCase } from '../../application/use-cases/create-reservation.use-case';
+import { ListUserActiveReservationsUseCase } from '../../application/use-cases/list-user-active-reservations.use-case';
+import { FinishReservationUseCase } from '../../application/use-cases/finish-reservation.use-case';
+
 import { CreateBikeDto } from '../../application/dtos/create-bike.dto';
 import { UpdateBikeDto } from '../../application/dtos/update-bike.dto';
 import { CreateStationDto } from '../../application/dtos/create-station.dto';
 import { CreateUserDto } from '../../application/dtos/create-user.dto';
+import { CreateReservationDto } from '../../application/dtos/create-reservation.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -37,6 +42,9 @@ export class AdminController {
     private readonly listStationsUseCase: ListStationsUseCase,
     private readonly createUserUseCase: CreateUserUseCase,
     private readonly getUserUseCase: GetUserUseCase,
+    private readonly createReservationUseCase: CreateReservationUseCase,
+    private readonly listUserActiveReservationsUseCase: ListUserActiveReservationsUseCase,
+    private readonly finishReservationUseCase: FinishReservationUseCase,
   ) {}
 
   // ---------------------------
@@ -97,5 +105,24 @@ export class AdminController {
   @Get('users/:id')
   async getUser(@Param('id') id: string) {
     return this.getUserUseCase.execute(id);
+  }
+
+  // ---------------------------
+  // RESERVATIONS
+  // ---------------------------
+
+  @Post('reservations')
+  async createReservation(@Body() dto: CreateReservationDto) {
+    return this.createReservationUseCase.execute(dto);
+  }
+
+  @Get('users/:userId/reservations')
+  async listActiveReservations(@Param('userId') userId: string) {
+    return this.listUserActiveReservationsUseCase.execute(userId);
+  }
+
+  @Patch('reservations/:id/finish')
+  async finishReservation(@Param('id') id: string) {
+    return this.finishReservationUseCase.execute(id);
   }
 }
