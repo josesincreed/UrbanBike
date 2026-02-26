@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ECS Cluster for UrbanBike
+
+Resources:
+
+  UrbanBikeECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: urbanbike-cluster
+
+Outputs:
+  ClusterName:
+    Value: !Ref UrbanBikeECSCluster

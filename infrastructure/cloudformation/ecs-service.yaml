@@ -1,0 +1,84 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: UrbanBike ECS Fargate Service with ALB
+
+Resources:
+
+  UrbanBikeALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP access to ALB
+      VpcId: vpc-0293617b3f00dd458
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  UrbanBikeServiceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow traffic from ALB to ECS
+      VpcId: vpc-0293617b3f00dd458
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          SourceSecurityGroupId: !Ref UrbanBikeALBSecurityGroup
+
+  UrbanBikeLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: urbanbike-alb
+      Subnets:
+        - subnet-0c5c943bfa06cc358
+        - subnet-0df53407b7e4509f9
+      SecurityGroups:
+        - !Ref UrbanBikeALBSecurityGroup
+      Scheme: internet-facing
+      Type: application
+
+  UrbanBikeTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: urbanbike-tg
+      Port: 3000
+      Protocol: HTTP
+      VpcId: vpc-0293617b3f00dd458
+      TargetType: ip
+      HealthCheckPath: /stations
+
+  UrbanBikeListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref UrbanBikeLoadBalancer
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref UrbanBikeTargetGroup
+
+  UrbanBikeService:
+    Type: AWS::ECS::Service
+    DependsOn: UrbanBikeListener
+    Properties:
+      ServiceName: urbanbike-service
+      Cluster: urbanbike-cluster
+      TaskDefinition: urbanbike-task
+      DesiredCount: 1
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          Subnets:
+            - subnet-0c5c943bfa06cc358
+            - subnet-0df53407b7e4509f9
+          SecurityGroups:
+            - !Ref UrbanBikeServiceSecurityGroup
+          AssignPublicIp: ENABLED
+      LoadBalancers:
+        - TargetGroupArn: !Ref UrbanBikeTargetGroup
+          ContainerName: urbanbike-container
+          ContainerPort: 3000
+
+Outputs:
+  LoadBalancerDNS:
+    Value: !GetAtt UrbanBikeLoadBalancer.DNSName

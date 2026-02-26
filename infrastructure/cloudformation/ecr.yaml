@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ECR repository for UrbanBike backend
+
+Resources:
+  UrbanBikeECR:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: urbanbike-backend
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      ImageTagMutability: MUTABLE
+
+Outputs:
+  RepositoryUri:
+    Value: !GetAtt UrbanBikeECR.RepositoryUri
