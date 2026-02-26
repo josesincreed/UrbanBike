@@ -33,24 +33,24 @@ export class CreateReservationUseCase {
   ) {}
 
   async execute(dto: CreateReservationDto): Promise<Reservation> {
-    // 1️⃣ Validate user
+    // Validate user
     const user = await this.userRepository.findById(dto.userId);
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    // 2️⃣ Validate bike
+    // Validate bike
     const bike = await this.bikeRepository.findById(dto.bikeId);
     if (!bike) {
       throw new NotFoundException('Bike not found');
     }
 
-    // 3️⃣ Check availability
+    // Check availability
     if (bike.status !== BikeStatus.AVAILABLE) {
       throw new BadRequestException('Bike is not available');
     }
 
-    // 4️⃣ Create reservation
+    // Create reservation
     const now = new Date().toISOString();
 
     const reservation: Reservation = {
@@ -65,7 +65,7 @@ export class CreateReservationUseCase {
 
     await this.reservationRepository.create(reservation);
 
-    // 5️⃣ Update bike status
+    // Update bike status
     bike.status = BikeStatus.RESERVED;
     bike.updatedAt = now;
 

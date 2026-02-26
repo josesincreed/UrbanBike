@@ -47,9 +47,7 @@ export class AdminController {
     private readonly finishReservationUseCase: FinishReservationUseCase,
   ) {}
 
-  // ---------------------------
   // BIKES
-  // ---------------------------
 
   @Post('bikes')
   async createBike(@Body() dto: CreateBikeDto) {
@@ -79,9 +77,7 @@ export class AdminController {
     return this.deleteBikeUseCase.execute(id);
   }
 
-  // ---------------------------
   // STATIONS
-  // ---------------------------
 
   @Post('stations')
   async createStation(@Body() dto: CreateStationDto) {
@@ -93,9 +89,7 @@ export class AdminController {
     return this.listStationsUseCase.execute();
   }
 
-  // ---------------------------
   // USERS
-  // ---------------------------
 
   @Post('users')
   async createUser(@Body() dto: CreateUserDto) {
@@ -107,9 +101,7 @@ export class AdminController {
     return this.getUserUseCase.execute(id);
   }
 
-  // ---------------------------
   // RESERVATIONS
-  // ---------------------------
 
   @Post('reservations')
   async createReservation(@Body() dto: CreateReservationDto) {

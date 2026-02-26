@@ -19,20 +19,20 @@ export const useUserReservations = (userId: string | null) => {
 
     setLoading(true);
     try {
-      // 1️⃣ Traer reservas activas
+      // Traer reservas activas
       const reservationsData = await getUserActiveReservations(userId);
 
-      // 2️⃣ Traer todas las bikes
+      // Traer todas las bikes
       const bikesResponse = await http.get('/admin/bikes');
       const bikes = bikesResponse.data;
 
-      // 3️⃣ Crear mapa id → code
+      // Crear mapa id → code
       const bikesMap: Record<string, string> = {};
       bikes.forEach((bike: any) => {
         bikesMap[bike.id] = bike.code;
       });
 
-      // 4️⃣ Normalizar con bikeCode incluido
+      // Normalizar con bikeCode incluido
       const normalized = reservationsData.map((r: any) => ({
         id: r.id,
         bikeId: r.bikeId,
