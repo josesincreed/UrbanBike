@@ -10,8 +10,12 @@ import { DeleteBikeUseCase } from '../../application/use-cases/delete-bike.use-c
 import { CreateStationUseCase } from '../../application/use-cases/create-station.use-case';
 import { ListStationsUseCase } from '../../application/use-cases/list-stations.use-case';
 
+import { CreateUserUseCase } from '../../application/use-cases/create-user.use-case';
+import { GetUserUseCase } from '../../application/use-cases/get-user.use-case';
+
 import { DynamoBikeRepository } from '../../infrastructure/repositories/dynamo-bike.repository';
 import { DynamoStationRepository } from '../../infrastructure/repositories/dynamo-station.repository';
+import { DynamoUserRepository } from '../../infrastructure/repositories/dynamo-user.repository';
 
 @Module({
   controllers: [AdminController],
@@ -27,6 +31,10 @@ import { DynamoStationRepository } from '../../infrastructure/repositories/dynam
     CreateStationUseCase,
     ListStationsUseCase,
 
+    // User UseCases
+    CreateUserUseCase,
+    GetUserUseCase,
+
     // Repositories
     {
       provide: 'BikeRepository',
@@ -35,6 +43,10 @@ import { DynamoStationRepository } from '../../infrastructure/repositories/dynam
     {
       provide: 'StationRepository',
       useClass: DynamoStationRepository,
+    },
+    {
+      provide: 'UserRepository',
+      useClass: DynamoUserRepository,
     },
   ],
 })
